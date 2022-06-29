@@ -1,5 +1,5 @@
 import * as TerminalService from './terminal.service.js';
-import { getErrorResponse, getSuccessResponse } from '../../lib/utils.js';
+import { getResponse, getSuccessResponse } from '../../lib/utils.js';
 
 export const getTerminals = async (req, res) => {
 	let result;
@@ -10,7 +10,8 @@ export const getTerminals = async (req, res) => {
 		result = { terminals: terminals };
 		response = getSuccessResponse(result);
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }
@@ -28,7 +29,8 @@ export const createTerminal = async (req, res) => {
 		result = { terminal: newTerminal };
 		response = getSuccessResponse(result);
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }
@@ -52,7 +54,8 @@ export const modifyTerminal = async (req, res) => {
 		};
 		response = getSuccessResponse(result);
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }
@@ -66,7 +69,8 @@ export const deleteTerminal = async (req, res) => {
 		await TerminalService.deleteTerminal(terminalId);
 		response = getSuccessResponse({});
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }

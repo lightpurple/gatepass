@@ -1,5 +1,7 @@
 import * as LogService from './log.service.js';
-import { getErrorResponse, getSuccessResponse } from '../../lib/utils.js';
+import { getResponse, getSuccessResponse } from '../../lib/utils.js';
+import { ApiError } from '../../lib/error.js';
+import { apiCode } from '../../lib/api-code.js';
 
 export const getLogs = async (req, res) => {
 	let result;
@@ -10,7 +12,8 @@ export const getLogs = async (req, res) => {
 		result = { logs: logs };
 		response = getSuccessResponse(result);
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }
@@ -20,10 +23,16 @@ export const deleteLogs = async (req, res) => {
 	let { logs } = req.body;
 
 	try {
+		logs = logs.map((id) => {
+			id = parseInt(id);
+			if (isNaN(id)) throw new ApiError(apiCode.BAD_REQUEST, 'logId is NaN');
+			return id;
+		})
 		await LogService.deleteLogs(logs);
 		response = getSuccessResponse({});
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }

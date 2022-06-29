@@ -14,11 +14,11 @@ export const getSuccessResponse = (result) => {
 	return payload;
 }
 
-export const getErrorResponse = (error) => {
+export const getResponse = (error) => {
 	const payload = {
-		code: apiCode.INTERNAL_SERVER_ERROR,
-		message: error,
-		result: {}
+		code: error.code,
+		message: error.message
 	}
 	return payload;
 }
+

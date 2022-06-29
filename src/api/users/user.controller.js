@@ -1,5 +1,5 @@
 import * as UserService from './user.service.js';
-import { getErrorResponse, getSuccessResponse } from '../../lib/utils.js';
+import { getResponse, getSuccessResponse } from '../../lib/utils.js';
 import { ApiError } from '../../lib/error.js';
 import { apiCode } from '../../lib/api-code.js';
 
@@ -12,7 +12,8 @@ export const getUsers = async (req, res) => {
 		result = { users: users };
 		response = getSuccessResponse(result);
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }
@@ -30,7 +31,8 @@ export const createUser = async (req, res) => {
 		result = { user: newUser };
 		response = getSuccessResponse(result);
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }
@@ -51,7 +53,8 @@ export const modifyUser = async (req, res) => {
 		};
 		response = getSuccessResponse(result);
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }
@@ -65,7 +68,8 @@ export const deleteUser = async (req, res) => {
 		await UserService.deleteUser(userId);
 		response = getSuccessResponse({});
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }
@@ -83,7 +87,8 @@ export const getUserGrants = async (req, res) => {
 		};
 		response = getSuccessResponse(result);
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }
@@ -103,7 +108,8 @@ export const addUserGrants = async (req, res) => {
 		};
 		response = getSuccessResponse(result);
 	} catch (error) {
-		response = getErrorResponse(error);
+		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		response = getResponse(error);
 	}
 	return res.json(response);
 }

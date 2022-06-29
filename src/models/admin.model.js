@@ -29,6 +29,11 @@ export class Admin extends Model {
 			deletedAt: 'deleted_at',
 			defaultScope: {
 				attributes: { exclude: ['password'] },
+			},
+			hooks: {
+				afterCreate: (model) => {
+					delete model.dataValues.password;
+				}
 			}
 		});
 		return Admin;

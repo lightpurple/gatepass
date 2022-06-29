@@ -1,7 +1,7 @@
 import { Users } from "../../models/users.model.js";
 import { Terminals } from "../../models/terminals.model.js";
 import { Grants } from "../../models/grants.model.js";
-import { ApiError } from "../../lib/error";
+import { ApiError } from "../../lib/error.js";
 import { apiCode } from "../../lib/api-code.js";
 import { Op } from "sequelize";
 
@@ -10,18 +10,18 @@ export const getUsers = async () => {
 	return users;
 }
 
-export const createUser = async (user) => {
+export const createUser = async (param) => {
 	const user = await Users.findOne({
 		where: {
 			[Op.or]: [{
-				serial_number: user.serial_number
+				serial_number: param.serial_number
 			}, {
-				phone: user.phone
+				phone: param.phone
 			}]
 		}
 	});
 	if (user) throw new ApiError(apiCode.CONFLICT, `The user(${user.id}) already exist`);
-	const newUser = await Users.createUser(user);
+	const newUser = await Users.createUser(param);
 	return newUser;
 }
 
