@@ -44,6 +44,14 @@ export class Users extends Model {
 		});
 	}
 
+	static async getUser(userId) {
+		return await this.findOne({
+			where: {
+				id: userId
+			}
+		});
+	}
+
 	static async getUserBySn(sn) {
 		return await this.findOne({
 			where: {
@@ -53,11 +61,7 @@ export class Users extends Model {
 	}
 
 	static async createUser(user) {
-		return await this.create({
-			name: user.name,
-			phone: user.phone,
-			serial_number: user.serialNumber
-		});
+		return await this.create(user);
 	}
 
 	static async updateUser(userId, user) {
