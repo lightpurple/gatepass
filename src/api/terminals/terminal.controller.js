@@ -21,7 +21,10 @@ export const createTerminal = async (req, res) => {
 	let { number } = req.body;
 
 	try {
-		let newTerminal = await TerminalService.createTerminal({ number });
+		if (number === undefined) {
+			throw new ApiError(apiCode.BAD_REQUEST, 'some value is invalid');
+		}
+		let newTerminal = await TerminalService.createTerminal(number);
 		result = { terminal: newTerminal };
 		response = getSuccessResponse(result);
 	} catch (error) {
@@ -33,10 +36,14 @@ export const createTerminal = async (req, res) => {
 export const modifyTerminal = async (req, res) => {
 	let result;
 	let response;
-	const terminalId = req.params.terminalId;
+	const terminalId = parseInt(req.params.terminalId);
 	const { number } = req.body;
 
 	try {
+		if (isNaN(terminalId)) throw new ApiError(apiCode.BAD_REQUEST, 'terminalId is NaN');
+		if (number === undefined) {
+			throw new ApiError(apiCode.BAD_REQUEST, 'some value is invalid');
+		}
 		await TerminalService.modifyTerminal(terminalId, number);
 		result = {
 			terminal: {
@@ -52,9 +59,10 @@ export const modifyTerminal = async (req, res) => {
 
 export const deleteTerminal = async (req, res) => {
 	let response;
-	const terminalId = req.params.terminalId;
+	const terminalId = parseInt(req.params.terminalId);
 
 	try {
+		if (isNaN(terminalId)) throw new ApiError(apiCode.BAD_REQUEST, 'terminalId is NaN');
 		await TerminalService.deleteTerminal(terminalId);
 		response = getSuccessResponse({});
 	} catch (error) {

@@ -20,7 +20,7 @@ export const createUser = async (user) => {
 			}]
 		}
 	});
-	if (user) throw new ApiError(apiCode.CONFLICT, 'user already exist');
+	if (user) throw new ApiError(apiCode.CONFLICT, `The user(${user.id}) already exist`);
 	const newUser = await Users.createUser(user);
 	return newUser;
 }
