@@ -27,13 +27,13 @@ export const createUser = async (param) => {
 
 export const modifyUser = async (userId, param) => {
 	const user = await Users.getUser(userId);
-	if (!user) throw new ApiError(apiCode.BAD_REQUEST, `The user(${userId}) does not exist`);
+	if (!user) throw new ApiError(apiCode.NOT_FOUND, `The user(${userId}) does not exist`);
 	await Users.updateUser(userId, param)
 }
 
 export const deleteUser = async (userId) => {
 	const user = await Users.getUser(userId);
-	if (!user) throw new ApiError(apiCode.BAD_REQUEST, `The user(${userId}) does not exist`);
+	if (!user) throw new ApiError(apiCode.NOT_FOUND, `The user(${userId}) does not exist`);
 	await Users.deleteUser(userId);
 }
 
@@ -53,7 +53,7 @@ export const addUserGrants = async (userId, terminalId) => {
 	const terminal = await Terminals.getTerminal(terminalId);
 	if (!terminal) throw new ApiError(apiCode.NOT_FOUND, `The terminal(${terminalId}) does not exist`)
 	const grant = await Grants.getGrant(user.id, terminal.id);
-	if (grant) throw new ApiError(apiCode.NOT_FOUND, `The user(${userId}) already has grant for terminal(${terminalId})`);
+	if (grant) throw new ApiError(apiCode.CONFLICT, `The user(${userId}) already has grant for terminal(${terminalId})`);
 
 	await Grants.addGrant(userId, terminalId);
 	return terminal;
