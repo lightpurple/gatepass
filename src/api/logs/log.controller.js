@@ -23,6 +23,7 @@ export const deleteLogs = async (req, res) => {
 	let { logs } = req.body;
 
 	try {
+		if (logs === undefined) throw new ApiError(apiCode.BAD_REQUEST, 'some value is invalid');
 		logs = logs.map((id) => {
 			id = parseInt(id);
 			if (isNaN(id)) throw new ApiError(apiCode.BAD_REQUEST, 'logId is NaN');

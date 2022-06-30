@@ -8,7 +8,7 @@ export const createAdmin = async (param) => {
 			email: param.email
 		}
 	});
-	if (admin) throw new ApiError(apiCode.CONFLICT, `The admin${admin.id} already exist`);
+	if (admin) throw new ApiError(apiCode.CONFLICT, `The admin(${admin.id}) already exist`);
 	let newAdmin = await Admin.create(param);
 	return newAdmin;
 }
