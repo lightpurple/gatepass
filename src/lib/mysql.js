@@ -5,6 +5,7 @@ import { Admin } from '../models/admin.model.js'
 import { Grants } from '../models/grants.model.js'
 import { Sequelize } from 'sequelize'
 import { env } from '../env.js'
+import logger from './logger.js'
 
 const sequelize = new Sequelize(env.db.database, env.db.username, env.db.password, {
 	host: env.db.host,
@@ -16,7 +17,10 @@ const sequelize = new Sequelize(env.db.database, env.db.username, env.db.passwor
 		freezeTableName: true
 	},
 	timezone: '+09:00',
-	logging: false
+	logging: (query) => {
+		if (query?.includes('SELECT 1+1 AS result') || query?.includes('SHOW INDEX FROM') || query?.includes('SELECT TABLE_NAME FROM')) return;
+		logger.sql(query);
+	}
 });
 
 function initModels() {

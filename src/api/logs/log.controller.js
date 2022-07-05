@@ -1,7 +1,8 @@
 import * as LogService from './log.service.js';
-import { getResponse, getSuccessResponse } from '../../lib/utils.js';
-import { ApiError } from '../../lib/error.js';
+import { getResponse, getSuccessResponse, parseRequest } from '../../lib/utils.js';
+import { ApiError, parseError } from '../../lib/error.js';
 import { apiCode } from '../../lib/api-code.js';
+import logger from '../../lib/logger.js';
 
 export const getLogs = async (req, res) => {
 	let result;
@@ -13,6 +14,7 @@ export const getLogs = async (req, res) => {
 		response = getSuccessResponse(result);
 	} catch (error) {
 		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		error.code === apiCode.INTERNAL_SERVER_ERROR ? logger.error(parseError(error)) : logger.info(parseError(error));
 		response = getResponse(error);
 	}
 	return res.json(response);
@@ -23,6 +25,7 @@ export const deleteLogs = async (req, res) => {
 	let { logs } = req.body;
 
 	try {
+		logger.req(parseRequest(req));
 		if (logs === undefined) throw new ApiError(apiCode.BAD_REQUEST, 'some value is invalid');
 		logs = logs.map((id) => {
 			id = parseInt(id);
@@ -33,6 +36,7 @@ export const deleteLogs = async (req, res) => {
 		response = getSuccessResponse({});
 	} catch (error) {
 		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		error.code === apiCode.INTERNAL_SERVER_ERROR ? logger.error(parseError(error)) : logger.info(parseError(error));
 		response = getResponse(error);
 	}
 	return res.json(response);

@@ -22,3 +22,15 @@ export const getResponse = (error) => {
 	return payload;
 }
 
+export const parseRequest = (req) => {
+	const payload = {
+		type: 'REQ',
+		method: req.method,
+		url: `${req.baseUrl}${req.url}`,
+		params: req.params,
+		query: req.query,
+		body: req.body,
+	}
+	return payload;
+}
+

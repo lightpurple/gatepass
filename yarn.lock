@@ -99,6 +99,13 @@ call-bind@^1.0.0:
     function-bind "^1.1.1"
     get-intrinsic "^1.0.2"
 
+clean-stack@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/clean-stack/-/clean-stack-4.2.0.tgz#c464e4cde4ac789f4e0735c5d75beb49d7b30b31"
+  integrity sha512-LYv6XPxoyODi36Dp976riBtSY27VmFo+MKqEU9QCCWyTrdEPDog+RWA7xQWHi6Vbp61j5c4cdzzX1NidnwtUWg==
+  dependencies:
+    escape-string-regexp "5.0.0"
+
 color-convert@^1.9.3:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
@@ -225,6 +232,11 @@ escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
   integrity sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==
+
+escape-string-regexp@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-5.0.0.tgz#4683126b500b61762f2dbebace1806e8be31b1c8"
+  integrity sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==
 
 etag@~1.8.1:
   version "1.8.1"

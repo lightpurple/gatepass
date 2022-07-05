@@ -1,5 +1,7 @@
 import * as TerminalService from './terminal.service.js';
-import { getResponse, getSuccessResponse } from '../../lib/utils.js';
+import { getResponse, getSuccessResponse, parseRequest } from '../../lib/utils.js';
+import logger from '../../lib/logger.js';
+import { parseError } from '../../lib/error.js';
 
 export const getTerminals = async (req, res) => {
 	let result;
@@ -11,6 +13,7 @@ export const getTerminals = async (req, res) => {
 		response = getSuccessResponse(result);
 	} catch (error) {
 		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		error.code === apiCode.INTERNAL_SERVER_ERROR ? logger.error(parseError(error)) : logger.info(parseError(error));
 		response = getResponse(error);
 	}
 	return res.json(response);
@@ -22,14 +25,14 @@ export const createTerminal = async (req, res) => {
 	let { number } = req.body;
 
 	try {
-		if (number === undefined) {
-			throw new ApiError(apiCode.BAD_REQUEST, 'some value is invalid');
-		}
+		logger.req(parseRequest(req));
+		if (number === undefined) throw new ApiError(apiCode.BAD_REQUEST, 'some value is invalid');
 		let newTerminal = await TerminalService.createTerminal(number);
 		result = { terminal: newTerminal };
 		response = getSuccessResponse(result);
 	} catch (error) {
 		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		error.code === apiCode.INTERNAL_SERVER_ERROR ? logger.error(parseError(error)) : logger.info(parseError(error));
 		response = getResponse(error);
 	}
 	return res.json(response);
@@ -42,6 +45,7 @@ export const modifyTerminal = async (req, res) => {
 	const { number } = req.body;
 
 	try {
+		logger.req(parseRequest(req));
 		if (isNaN(terminalId)) throw new ApiError(apiCode.BAD_REQUEST, 'terminalId is NaN');
 		if (number === undefined) {
 			throw new ApiError(apiCode.BAD_REQUEST, 'some value is invalid');
@@ -55,6 +59,7 @@ export const modifyTerminal = async (req, res) => {
 		response = getSuccessResponse(result);
 	} catch (error) {
 		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		error.code === apiCode.INTERNAL_SERVER_ERROR ? logger.error(parseError(error)) : logger.info(parseError(error));
 		response = getResponse(error);
 	}
 	return res.json(response);
@@ -65,11 +70,13 @@ export const deleteTerminal = async (req, res) => {
 	const terminalId = parseInt(req.params.terminalId);
 
 	try {
+		logger.req(parseRequest(req));
 		if (isNaN(terminalId)) throw new ApiError(apiCode.BAD_REQUEST, 'terminalId is NaN');
 		await TerminalService.deleteTerminal(terminalId);
 		response = getSuccessResponse({});
 	} catch (error) {
 		error.code = error.code || apiCode.INTERNAL_SERVER_ERROR;
+		error.code === apiCode.INTERNAL_SERVER_ERROR ? logger.error(parseError(error)) : logger.info(parseError(error));
 		response = getResponse(error);
 	}
 	return res.json(response);

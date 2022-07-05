@@ -2,7 +2,7 @@ import winston from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
 
 const logDir = 'systemLogs';  // logs 디렉토리 하위에 로그 파일 저장
-const { combine, timestamp, printf, json } = winston.format;
+const { combine, timestamp, printf, json, splat } = winston.format;
 const LEVEL = Symbol.for('level');
 
 // const customLevels: winston.config.AbstractConfigSetLevels = {
@@ -17,7 +17,8 @@ const customLevels = {
 		error: 0,
 		info: 1,
 		http: 2,
-		sql: 3
+		req: 3,
+		sql: 4
 	}
 };
 
@@ -31,13 +32,31 @@ const filterOnly = (level) => {
 
 const format = combine(
 	timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-	json(),
-	printf(info => `${info.timestamp} ${info.level.toUpperCase()}: ${info.message}`)
+	printf(info => {
+		if (typeof info.message === 'object') {
+			info.message = JSON.stringify(info.message, null, 4);
+		} else {
+			info.message = `${info.timestamp} ${info.level.toUpperCase()}: ${info.message}`;
+		}
+		return info.message;
+	} ),
 )
 
 const transports = [
 	new winston.transports.Console(),
 	// http 로그를 저장할 파일 설정
+	new winstonDaily({
+		level: 'req',
+		datePattern: 'YYYY-MM-DD',
+		dirname: `${logDir}/req`,
+		filename:  `%DATE%.log`,
+		format: combine(
+			format,
+			filterOnly('req')
+		),
+		maxFiles: 10,  // 10일치 로그 파일 저장
+		zippedArchive: true,
+	}),
 	new winstonDaily({
 		level: 'http',
 		datePattern: 'YYYY-MM-DD',
