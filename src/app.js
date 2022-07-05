@@ -2,11 +2,13 @@ import express from 'express'
 import { env } from './env.js'
 import * as Api from './api/router.js'
 import * as mysql from './lib/mysql.js'
+import morganMiddleware from './lib/morgan.js'
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.use(morganMiddleware);
 app.use(Api.path, Api.router);
 
 const port = env.port || 3000

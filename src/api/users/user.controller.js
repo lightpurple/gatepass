@@ -97,11 +97,11 @@ export const addUserGrants = async (req, res) => {
 	let result;
 	let response;
 	const userId = parseInt(req.params.userId);
-	let { terminalId } = req.body;
+	const terminalId = parseInt(req.body.terminalId);
 
 	try {
 		if (isNaN(userId)) throw new ApiError(apiCode.BAD_REQUEST, 'userId is NaN');
-		if (isNaN(parseInt(terminalId))) throw new ApiError(apiCode.BAD_REQUEST, 'terminalId is NaN');
+		if (isNaN(terminalId)) throw new ApiError(apiCode.BAD_REQUEST, 'terminalId is NaN');
 		const newGrant = await UserService.addUserGrants(userId, terminalId);
 		result = {
 			terminal: newGrant

@@ -16,6 +16,7 @@ const sequelize = new Sequelize(env.db.database, env.db.username, env.db.passwor
 		freezeTableName: true
 	},
 	timezone: '+09:00',
+	logging: false
 });
 
 function initModels() {
